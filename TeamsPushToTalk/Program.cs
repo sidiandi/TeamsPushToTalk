@@ -11,6 +11,15 @@ namespace TeamsPushToTalk
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(@"Push-to-Talk for MS Teams
+
+Usage:
+  Hold down the middle mouse button to speak.
+  Press Ctrl+C to exit.
+
+See https://github.com/sidiandi/TeamsPushToTalk
+
+");
             PushToTalkWithMiddleMouseButton();
         }
 
