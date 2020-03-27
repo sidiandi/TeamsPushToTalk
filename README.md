@@ -9,7 +9,9 @@ According to [uservoice](https://microsoftteams.uservoice.com/forums/555103-publ
 Meanwhile, just use this workaround.
 
 Usage:
+* Download [TeamsPushToTalk.zip](https://github.com/sidiandi/TeamsPushToTalk/releases/latest/download/TeamsPushToTalk.zip) and unzip.
 * Start TeamsPushToTalk.exe
 * Start MS Teams
-* From any window, press and hold the **middle mouse button* to speak.
+* Start a meeting. Be sure that you are muted.
+* From any window, press and hold the **middle mouse button** to speak. This will bring Teams to the foreground and toggle the mic.
 
