@@ -59,6 +59,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="HumanInterfaceDeviceMonitor.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="Keyboard.cs" />

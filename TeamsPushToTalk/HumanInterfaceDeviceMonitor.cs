@@ -103,19 +103,24 @@ public class HumanInterfaceDeviceMonitor : IDisposable
 
     public bool Disable { get; set; }  = false;
 
-    private IntPtr HookCallback(
-        int nCode, IntPtr wParam, IntPtr lParam)
+    private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
-            if (!Disable)
+            NativeMethods.KBDLLHOOKSTRUCT h = (NativeMethods.KBDLLHOOKSTRUCT) Marshal.PtrToStructure(lParam, typeof(NativeMethods.KBDLLHOOKSTRUCT));
+
+            if ((h.flags & (NativeMethods.KBDLLHOOKSTRUCTFlags.LLKHF_INJECTED | NativeMethods.KBDLLHOOKSTRUCTFlags.LLKHF_LOWER_IL_INJECTED)) == 0)
             {
-                var kea = CreateKeyEventArgs(wParam, lParam);
-                if (IsKeyDown(wParam))
+                Console.WriteLine($"${nCode} {wParam} {lParam} {h.flags}");
+                if (!Disable)
                 {
-                    keyDown.OnNext(kea);
-                }
-                if (IsKeyUp(wParam))
-                {
-                    keyUp.OnNext(kea);
+                    var kea = CreateKeyEventArgs(wParam, lParam);
+                    if (IsKeyDown(wParam))
+                    {
+                        keyDown.OnNext(kea);
+                    }
+                    if (IsKeyUp(wParam))
+                    {
+                        keyUp.OnNext(kea);
+                    }
                 }
             }
 

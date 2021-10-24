@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TeamsPushToTalk
@@ -30,40 +31,48 @@ namespace TeamsPushToTalk
 
         Window foregroundWindow;
 
-        internal void Unmute()
+        internal Task Unmute() => Task.Factory.StartNew(() =>
         {
-            var teamsWindow = FindTeamsWindow();
-
-            if (teamsWindow != null)
+            lock (this)
             {
+                Console.WriteLine("unmute");
                 if (!mute) return;
                 mute = false;
-                Console.WriteLine("unmute");
-                foregroundWindow = Window.GetForegroundWindow();
-                teamsWindow.SetForegroundWindow();
-                SendMuteShortcut(teamsWindow);
+
+                var teamsWindow = FindTeamsWindow();
+
+                if (teamsWindow != null)
+                {
+                    foregroundWindow = Window.GetForegroundWindow();
+                    teamsWindow.SetForegroundWindow();
+                    SendMuteShortcut(teamsWindow);
+                }
             }
-        }
+        }, TaskCreationOptions.LongRunning);
 
         static void SendMuteShortcut(Window teamsWindow)
         {
             Keyboard.Messaging.PostMessageAll(teamsWindow.Handle, new Keyboard.Key(Keyboard.Messaging.VKeys.KEY_M), false, true, true);
         }
 
-        internal void Mute()
+        internal Task Mute() => Task.Factory.StartNew(() =>
         {
-            var teamsWindow = FindTeamsWindow();
-
-            if (teamsWindow != null)
+            lock (this)
             {
+                Console.WriteLine("mute");
                 if (mute) return;
                 mute = true;
-                Console.WriteLine("mute");
-                teamsWindow.SetForegroundWindow();
-                SendMuteShortcut(teamsWindow);
-                foregroundWindow.SetForegroundWindow();
+
+                var teamsWindow = FindTeamsWindow();
+
+                if (teamsWindow != null)
+                {
+                    teamsWindow.SetForegroundWindow();
+                    SendMuteShortcut(teamsWindow);
+                    foregroundWindow.SetForegroundWindow();
+                }
             }
-        }
+        }, TaskCreationOptions.LongRunning);
 
         public void Dispose()
         {
